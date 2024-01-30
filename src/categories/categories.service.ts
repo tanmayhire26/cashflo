@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoriesRepository } from './repository/categories.repository';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    
-    return 'This action adds a new category';
+  constructor(private readonly categoriesRepo: CategoriesRepository) {}
+  async create(createCategoryDto: CreateCategoryDto) {
+    createCategoryDto['parent_category_id'] = new mongoose.Types.ObjectId(
+      createCategoryDto['parent_category_id'],
+    );
+    const category = await this.categoriesRepo.create(createCategoryDto);
+    return category;
   }
 
   findAll() {

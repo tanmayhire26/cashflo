@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsString, MaxLength } from '@nestjs/class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import mongoose, { ObjectId } from 'mongoose';
 
 export class CreateCategoryDto {
   @IsNotEmpty()
@@ -12,4 +13,7 @@ export class CreateCategoryDto {
   @MaxLength(500, { message: `"description" cannot exceed 500 characters` })
   @ApiProperty()
   description: string;
+
+  @ApiProperty()
+  parent_category_id: string | mongoose.Types.ObjectId;
 }
