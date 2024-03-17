@@ -16,4 +16,9 @@ export class CategoriesRepository {
     const savedCategory = await category.save();
     return savedCategory;
   }
+
+  async find() {
+    const categories = await this.categoriesModel.find();
+    return categories;
+  }
 }

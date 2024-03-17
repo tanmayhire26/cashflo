@@ -15,8 +15,8 @@ export class CategoriesService {
     return category;
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    return await this.categoriesRepo.find();
   }
 
   findOne(id: number) {

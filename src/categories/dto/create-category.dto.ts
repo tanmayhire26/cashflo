@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose from 'mongoose';
 
 export class CreateCategoryDto {
   @IsNotEmpty()
@@ -16,4 +16,8 @@ export class CreateCategoryDto {
 
   @ApiProperty()
   parent_category_id: string | mongoose.Types.ObjectId;
+
+  @ApiProperty()
+  @IsString()
+  categoryLevel: string;
 }
