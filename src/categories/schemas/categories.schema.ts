@@ -10,7 +10,7 @@ export class Categories extends Document {
   @Prop({ type: String })
   description: string;
 
-  @Prop({ type: mongoose.Types.ObjectId, required: true })
+  @Prop({ type: mongoose.Types.ObjectId })
   parent_category: mongoose.Types.ObjectId;
 
   @Prop({ type: String, enum: ['l1', 'l2', 'l3'], required: true })
