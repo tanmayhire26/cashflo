@@ -16,7 +16,11 @@ export class CategoriesService {
   }
 
   async findAll() {
+    try {
     return await this.categoriesRepo.find();
+    } catch (error) {
+      throw error;
+    }
   }
 
   findOne(id: number) {

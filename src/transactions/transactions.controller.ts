@@ -70,7 +70,7 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{ ", JSON.stringify(response.data, null, 4));
+      console.log("Diff Data =============================================  ", JSON.stringify(response.data, null, 4));
       
       const urlFilesChanged = `${baseUrl}/repos/${owner}/${repo}/pulls/${pullNumber}/files`;
            const responseFilesChanged = await axios.get(urlFilesChanged, {
@@ -79,7 +79,7 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANMGES ))))))))))))))))))))))))))   ", responseFilesChanged);
+      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANMGED ))))))))))))))))))))))))))   ", responseFilesChanged);
        const filesChanged = responseFilesChanged.data; // This will contain the diff as text
 
        const fileContents = await Promise.all(filesChanged.map(async (file) => {
@@ -87,12 +87,10 @@ export class TransactionsController {
       return { filename: file.filename, content };
     }));
 
-    // const fileContent = await this.getFileContent(owner, repo, "src/transactions/transactions.controller.ts" );
 
 
-    console.log("Final FILE CONTENT +++++++++++++++++++++============================================== ", fileContents);
+    console.log("File name and its contents in the changed files PR ", fileContents);
     return fileContents;
-    // return fileContent; // Return all file contents
   }
       
 
@@ -113,7 +111,7 @@ export class TransactionsController {
         'Accept': 'application/vnd.github.v3.raw',
       },
     });
-    console.log("Response .data. content ==================================== ", response.data);
+    console.log("1 File content changed ", response.data);
     return response.data;
     } catch (error) {
       throw error;
