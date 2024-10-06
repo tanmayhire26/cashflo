@@ -62,7 +62,7 @@ export class TransactionsController {
           const owner = "tanmayhire26";
           const repo="cashflo";
           const pullNumber = pullRequestData.number;
-          const token = "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";
+          const token = this.token;
            const url = `${baseUrl}/repos/${owner}/${repo}/pulls/${pullNumber}.diff`;
            const response = await axios.get(url, {
         headers: {
