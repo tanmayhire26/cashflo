@@ -79,7 +79,7 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANMGED ))))))))))))))))))))))))))   ", responseFilesChanged);
+      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANGED ))))))))))))))))))))))))))   ", responseFilesChanged);
        const filesChanged = responseFilesChanged.data; // This will contain the diff as text
 
        const fileContents = await Promise.all(filesChanged.map(async (file) => {
