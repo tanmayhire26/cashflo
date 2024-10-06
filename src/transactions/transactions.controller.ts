@@ -18,7 +18,7 @@ import axios from 'axios';
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
   private readonly baseUrl = 'https://api.github.com';
-  private readonly token = 'process.env.GITHUB_TOKEN';
+  private readonly token = process.env.GITHUB_TOKEN;
 
   @Post()
   async create(@Body() createTransactionDto: CreateTransactionDto) {
