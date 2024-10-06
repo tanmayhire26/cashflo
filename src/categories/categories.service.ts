@@ -16,11 +16,9 @@ export class CategoriesService {
   }
 
   async findAll() {
-    try {
-    return await this.categoriesRepo.find();
-    } catch (error) {
-      throw error;
-    }
+    const categories = await this.categoriesRepo.find();
+    console.log(categories);
+    return categories;
   }
 
   findOne(id: number) {
