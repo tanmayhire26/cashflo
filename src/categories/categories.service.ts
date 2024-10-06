@@ -2,16 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoriesRepository } from './repository/categories.repository';
-import mongoose from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly categoriesRepo: CategoriesRepository) {}
+
   async create(createCategoryDto: CreateCategoryDto) {
-    createCategoryDto['parent_category_id'] = new mongoose.Types.ObjectId(
-      createCategoryDto['parent_category_id'],
-    );
-    const category = await this.categoriesRepo.create(createCategoryDto);
+    const { parent_category_id, ...rest } = createCategoryDto;
+    const parentCategoryId = parent_category_id ? new ObjectId(parent_category_id) : undefined;
+    const category = await this.categoriesRepo.create({ ...rest, parent_category_id: parentCategoryId });
     return category;
   }
 
@@ -19,15 +19,16 @@ export class CategoriesService {
     return await this.categoriesRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  findOne(id: string) {
+    return this.categoriesRepo.findById(id);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    await this.categoriesRepo.update(id, updateCategoryDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    await this.categoriesRepo.remove(id);
   }
 }
