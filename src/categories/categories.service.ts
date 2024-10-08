@@ -16,7 +16,9 @@ export class CategoriesService {
   }
 
   async findAll() {
-    return await this.categoriesRepo.find();
+    const categories = await this.categoriesRepo.find();
+    console.log(categories);
+    return categories;
   }
 
   findOne(id: number) {
