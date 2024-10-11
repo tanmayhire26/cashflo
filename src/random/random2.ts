@@ -1,14 +1,14 @@
-function gnrteRndmWrd() {
-    let ltrs = "abcdefghijklmnopqrstuvwxyz"; // possible letters
-    var wrdLth = Math.floor(Math.random() * 10) + 3; // word length between 3 and 12
-    var wrd = ""; // empty word
+const gnrteRndmWrd = () => {
+    let ltrs = "abcdefghijklmnopqrstuvwxyz"; 
+    var wrdLth = Math.floor(Math.random() * 10) + 3; 
+    var wrd = ""; 
 
     for (var i = 0; i < wrdLth; i++) {
-        var rdmIndex = Math.floor(Math.random() * ltrs.length); // random index
-        wrd += ltrs.charAt(rdmIndex); // add random letter to word
+        var rdmIndex = Math.floor(Math.random() * ltrs.length); 
+        wrd += ltrs.charAt(rdmIndex); 
     }
 
-    return wrd; // return the generated word
+    return wrd; 
 }
 
-console.log(gnrteRndmWrd()); // testing the function
+console.log(gnrteRndmWrd());
