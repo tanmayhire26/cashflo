@@ -1,5 +1,5 @@
 function gnrteRndmWrd() {
-    var ltrs = "abcdefghijklmnopqrstuvwxyz"; // possible letters
+    let ltrs = "abcdefghijklmnopqrstuvwxyz"; // possible letters
     var wrdLth = Math.floor(Math.random() * 10) + 3; // word length between 3 and 12
     var wrd = ""; // empty word
 
