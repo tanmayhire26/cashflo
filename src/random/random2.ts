@@ -5,10 +5,8 @@ const generateRandomWord = (minLength = 3, maxLength = 12) => {
 
     const letters = "abcdefghijklmnopqrstuvwxyz";
     const wordLength = getRandomInt(minLength, maxLength);
-    let word = '';
-    for (let i = 0; i < wordLength; i++) {
-        word += letters[getRandomInt(0, letters.length - 1)];
-    }
+    const wordArray = Array.from({ length: wordLength }, () => letters[getRandomInt(0, letters.length - 1)]);
+    const word = wordArray.join('');
     return word;
 };
 
