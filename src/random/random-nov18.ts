@@ -1,8 +1,8 @@
 function removeDuplicates<T>(array: T[], key: keyof T): T[] {
     const uniqueObjects = new Map<any, T>();
-    array.forEach(item => {
-        uniqueObjects.set(item[key], item);
-    });
+    for (let i = 0; i < array.length; i++) {
+        uniqueObjects.set(array[i][key], array[i]);
+    }
     return Array.from(uniqueObjects.values());
 }
 
