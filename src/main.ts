@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+const DEFAULT_PORT = 7007;
+const DEFAULT_ORIGIN = 'http://localhost:3000';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { abortOnError: false });
   const config = new DocumentBuilder()
@@ -12,7 +15,7 @@ async function bootstrap() {
     .build();
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: DEFAULT_ORIGIN,
     methods: 'GET,PUT,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
     credentials: true,
@@ -20,6 +23,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  await app.listen(7007);
+  await app.listen(DEFAULT_PORT);
 }
+
 bootstrap();

@@ -1,20 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as mongoose from 'mongoose';
+import { Types } from 'mongoose';
+
+export enum CategoryLevel {
+  L1 = 'l1',
+  L2 = 'l2',
+  L3 = 'l3',
+}
 
 @Schema({ collection: 'categories', timestamps: true })
-export class Categories extends Document {
+export class Category extends Document {
   @Prop({ type: String, required: true, unique: true })
   title: string;
 
   @Prop({ type: String })
   description: string;
 
-  @Prop({ type: mongoose.Types.ObjectId })
-  parent_category: mongoose.Types.ObjectId;
+  @Prop({ type: Types.ObjectId })
+  parentCategory: Types.ObjectId;
 
-  @Prop({ type: String, enum: ['l1', 'l2', 'l3'], required: true })
-  categoryLevel: string;
+  @Prop({ type: String, enum: Object.values(CategoryLevel), required: true })
+  categoryLevel: CategoryLevel;
 }
 
-export const CategoriesSchema = SchemaFactory.createForClass(Categories);
+export const CategorySchema = SchemaFactory.createForClass(Category);
