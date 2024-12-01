@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { TransactionsModule } from './transactions/transactions.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/cashflo'),
+    DatabaseModule,
     CategoriesModule,
     TransactionsModule,
   ],
@@ -16,3 +16,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 })
 export class AppModule {}
 
+@Module({
+  imports: [MongooseModule.forRoot('mongodb://localhost:27017/cashflo')],
+})
+export class DatabaseModule {}
