@@ -1,54 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { Request } from 'express';
-import axios from 'axios';
-
-@Controller('transactions')
-export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
-  private readonly baseUrl = 'https://api.github.com';
-  private readonly token = process.env.GITHUB_TOKEN;
-
-  @Post()
-  async create(@Body() createTransactionDto: CreateTransactionDto) {
-    return await this.transactionsService.create(createTransactionDto);
-  }
-
-  @Get()
-  async findAll() {
-    return await this.transactionsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
-  }
-
-  @Post('get-PR-data')
+@Post('get-PR-data')
   async getPrData(
     @Req() req: Request
   ) {
@@ -56,7 +6,6 @@ export class TransactionsController {
       const eventType = req.headers['x-github-event'];
       if (eventType === 'pull_request') {
           const pullRequestData = req.body;
-          console.log('Pull Request Event Received:', pullRequestData);
           const baseUrl = 'https://api.github.com';
           const owner = "tanmayhire26";
           const repo="cashflo";
@@ -69,7 +18,6 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("Diff Data =============================================  ", JSON.stringify(response.data, null, 4));
       
       const urlFilesChanged = `${baseUrl}/repos/${owner}/${repo}/pulls/${pullNumber}/files`;
            const responseFilesChanged = await axios.get(urlFilesChanged, {
@@ -78,7 +26,6 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANGED ))))))))))))))))))))))))))   ", responseFilesChanged.data);
        const filesChanged = responseFilesChanged.data; 
 
        const fileContents = await Promise.all(filesChanged.map(async (file) => {
@@ -86,7 +33,6 @@ export class TransactionsController {
       return { filename: file.filename, content };
     }));
 
-    console.log("File name and its contents in the changed files PR ", fileContents);
     return fileContents;
       }
     } catch (error) {
@@ -99,14 +45,12 @@ export class TransactionsController {
                 const baseUrl = 'https://api.github.com';
 
        const url = `${baseUrl}/repos/${owner}/${repo}/contents/${path}`;
-       console.log("path.............................", path);
     const response = await axios.get(url, {
       headers: {
         'Authorization': `token ${this.token}`,
         'Accept': 'application/vnd.github.v3.raw',
       },
     });
-    console.log("1 File content changed ", response.data);
     return response.data;
     } catch (error) {
       throw error;
