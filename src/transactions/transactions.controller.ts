@@ -57,7 +57,6 @@ export class TransactionsController {
       if (eventType === 'pull_request') {
           const pullRequestData = req.body;
           console.log('Pull Request Event Received:', pullRequestData);
-          // Handle pull request data as needed
           const baseUrl = 'https://api.github.com';
           const owner = "tanmayhire26";
           const repo="cashflo";
@@ -79,21 +78,17 @@ export class TransactionsController {
           'Accept': 'application/vnd.github.v3.diff',
         },
       });
-      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANGED ))))))))))))))))))))))))))   ", responseFilesChanged);
-       const filesChanged = responseFilesChanged.data; // This will contain the diff as text
+      console.log("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))   FILEs CHANGED ))))))))))))))))))))))))))   ", responseFilesChanged.data);
+       const filesChanged = responseFilesChanged.data; 
 
        const fileContents = await Promise.all(filesChanged.map(async (file) => {
       const content = await this.getFileContent(owner, repo, file.filename);
       return { filename: file.filename, content };
     }));
 
-
-
     console.log("File name and its contents in the changed files PR ", fileContents);
     return fileContents;
-  }
-      
-
+      }
     } catch (error) {
       throw error
     }
