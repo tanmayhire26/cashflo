@@ -1,63 +1,59 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { Request } from 'express';
-
-@Controller('transactions')
-export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
-
-  @Post()
-  async create(@Body() createTransactionDto: CreateTransactionDto) {
-    return await this.transactionsService.create(createTransactionDto);
-  }
-
-  @Get()
-  async findAll() {
-    return await this.transactionsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
-    return this.transactionsService.update(+id, updateTransactionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
-  }
-
-  @Post('get-PR-data')
-  getPrData(
+@Post('get-PR-data')
+  async getPrData(
     @Req() req: Request
   ) {
     try {
       const eventType = req.headers['x-github-event'];
       if (eventType === 'pull_request') {
           const pullRequestData = req.body;
-          console.log('Pull Request Event Received:', pullRequestData);
-          // Handle pull request data as needed
+          const baseUrl = 'https://api.github.com';
+          const owner = "tanmayhire26";
+          const repo="cashflo";
+          const pullNumber = pullRequestData.number;
+          const token = this.token;
+           const url = `${baseUrl}/repos/${owner}/${repo}/pulls/${pullNumber}.diff`;
+           const response = await axios.get(url, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3.diff',
+        },
+      });
+      
+      const urlFilesChanged = `${baseUrl}/repos/${owner}/${repo}/pulls/${pullNumber}/files`;
+           const responseFilesChanged = await axios.get(urlFilesChanged, {
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3.diff',
+        },
+      });
+       const filesChanged = responseFilesChanged.data; 
+
+       const fileContents = await Promise.all(filesChanged.map(async (file) => {
+      const content = await this.getFileContent(owner, repo, file.filename);
+      return { filename: file.filename, content };
+    }));
+
+    return fileContents;
       }
     } catch (error) {
       throw error
+    }
+  }
+
+  async getFileContent(owner, repo, path) {
+    try {
+                const baseUrl = 'https://api.github.com';
+
+       const url = `${baseUrl}/repos/${owner}/${repo}/contents/${path}`;
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `token ${this.token}`,
+        'Accept': 'application/vnd.github.v3.raw',
+      },
+    });
+    return response.data;
+    } catch (error) {
+      throw error;
     }
   }
 }
